@@ -41,8 +41,34 @@ describe("vendingMachine", () => {
       });
       expect(result).toEqual([change.quarters.quantity + 10]);
     });
+    test("multiple coins passed for restocking", () => {
+      const result = myMachine.addChange({
+        restockChange: {
+          loonies: { quantity: 11 },
+          dimes: { quantity: 6 },
+          nickels: { quantity: 3 }
+        }
+      });
+      expect(result).toEqual([
+        change.loonies.quantity + 11,
+        change.dimes.quantity + 6,
+        change.nickels.quantity + 3
+      ]);
+    });
   });
   describe("Return Change", () => {
+    test("ammount give is less than the cost of the item", () => {
+      const result = () => {
+        myMachine.giveChange(3, 2);
+      };
+      expect(result).toThrowError;
+    });
+    test("Function not called with numbers", () => {
+      const result = () => {
+        myMachine.giveChange("Hello", 2);
+      };
+      expect(result).toThrowError;
+    });
     test("a resonable purchase and appropriate change given", () => {
       const result = myMachine.giveChange(3, 3.5);
       expect(result).toEqual(["quarts: 2"]);
