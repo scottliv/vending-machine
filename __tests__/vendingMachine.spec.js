@@ -107,5 +107,24 @@ describe("vendingMachine", () => {
       ]);
     });
   });
-  describe("sale", () => {});
+  describe("sale", () => {
+    test("invalid item code passed", () => {
+      const result = () => {
+        myMachine.sellItem({
+          item: "B52",
+          coins: { quarters: { quantity: 56 } }
+        });
+      };
+      expect(result).toThrowError();
+    });
+    test("invalid coins passed", () => {
+      const result = () => {
+        myMachine.sellItem({
+          item: "a1",
+          coins: { goobers: { quantity: 42 } }
+        });
+      };
+      expect(result).toThrowError();
+    });
+  });
 });
