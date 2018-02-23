@@ -29,6 +29,7 @@ describe("vendingMachine", () => {
     });
   });
   describe("restock change", () => {
+    const expectedUpdatedChange = JSON.parse(JSON.stringify(change));
     test("invalid input given to restocking function", () => {
       const result = () => {
         myMachine.addChange("some phoney input");
@@ -39,7 +40,13 @@ describe("vendingMachine", () => {
       const result = myMachine.addChange({
         restockChange: { quarters: { quantity: 10 } }
       });
-      expect(result).toEqual([change.quarters.quantity + 10]);
+      expect(result).toEqual({
+        ...expectedUpdatedChange,
+        quarters: {
+          value: 0.25,
+          quantity: expectedUpdatedChange.quarters.quantity + 10
+        }
+      });
     });
     test("multiple coins passed for restocking", () => {
       const result = myMachine.addChange({
@@ -49,11 +56,27 @@ describe("vendingMachine", () => {
           nickels: { quantity: 3 }
         }
       });
-      expect(result).toEqual([
-        change.loonies.quantity + 11,
-        change.dimes.quantity + 6,
-        change.nickels.quantity + 3
-      ]);
+
+      expect(result).toEqual({
+        ...expectedUpdatedChange,
+        loonies: {
+          value: 1,
+          quantity: expectedUpdatedChange.loonies.quantity + 11
+        },
+        dimes: {
+          value: 0.1,
+          quantity: expectedUpdatedChange.dimes.quantity + 6
+        },
+        nickels: {
+          value: 0.05,
+          quantity: expectedUpdatedChange.nickels.quantity + 3
+        },
+        // quarters included here as the myMachine quarter quantities persists from the last test
+        quarters: {
+          value: 0.25,
+          quantity: expectedUpdatedChange.quarters.quantity + 10
+        }
+      });
     });
   });
   describe("Return Change", () => {
