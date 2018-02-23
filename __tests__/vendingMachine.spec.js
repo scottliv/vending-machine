@@ -28,7 +28,7 @@ describe("vendingMachine", () => {
       expect(result).toEqual(70);
     });
   });
-  describe("change", () => {
+  describe("restock change", () => {
     test("invalid input given to restocking function", () => {
       const result = () => {
         myMachine.addChange("some phoney input");
@@ -40,6 +40,22 @@ describe("vendingMachine", () => {
         restockChange: { quarters: { quantity: 10 } }
       });
       expect(result).toEqual([change.quarters.quantity + 10]);
+    });
+  });
+  describe("Return Change", () => {
+    test("a resonable purchase and appropriate change given", () => {
+      const result = myMachine.giveChange(3, 3.5);
+      expect(result).toEqual(["quarts: 2"]);
+    });
+    test("an unresonable purchase and appropriate change given but exausting the twoonie supply", () => {
+      const result = myMachine.giveChange(3.35, 250);
+      expect(result).toEqual([
+        "twoons: 56",
+        "loons: 134",
+        "quarts: 2",
+        "dimesies: 1",
+        "nicks: 1"
+      ]);
     });
   });
   describe("sale", () => {});
