@@ -108,9 +108,10 @@ describe("vendingMachine", () => {
     });
   });
   describe("sale", () => {
+    const saleMachine = new vendingMachine({ inventory, change });
     test("invalid item code passed", () => {
       const result = () => {
-        myMachine.sellItem({
+        saleMachine.sellItem({
           item: "B52",
           coins: { quarters: { quantity: 56 } }
         });
@@ -119,12 +120,22 @@ describe("vendingMachine", () => {
     });
     test("invalid coins passed", () => {
       const result = () => {
-        myMachine.sellItem({
+        saleMachine.sellItem({
           item: "a1",
           coins: { goobers: { quantity: 42 } }
         });
       };
       expect(result).toThrowError();
+    });
+    test("purchase item", () => {
+      const result = saleMachine.sellItem({
+        item: "a1",
+        coins: {
+          loonies: 1,
+          quarters: 4
+        }
+      });
+      expect(result).toEqual({ item: "cola", change: ["quarts: 1"] });
     });
   });
 });
