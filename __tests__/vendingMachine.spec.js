@@ -71,7 +71,7 @@ describe("vendingMachine", () => {
           value: 0.05,
           quantity: expectedUpdatedChange.nickels.quantity + 3
         },
-        // quarters included here as the myMachine quarter quantities persists from the last test
+        // quarters included here as the myMachine quarter quantity persists from the last test
         quarters: {
           value: 0.25,
           quantity: expectedUpdatedChange.quarters.quantity + 10
@@ -113,7 +113,7 @@ describe("vendingMachine", () => {
       const result = () => {
         saleMachine.sellItem({
           item: "B52",
-          coins: { quarters: { quantity: 56 } }
+          coins: { quarters: 56 }
         });
       };
       expect(result).toThrowError();
@@ -122,10 +122,29 @@ describe("vendingMachine", () => {
       const result = () => {
         saleMachine.sellItem({
           item: "a1",
-          coins: { goobers: { quantity: 42 } }
+          coins: { goobers: 42 }
         });
       };
       expect(result).toThrowError();
+    });
+    test("Not enough moo-lah", () => {
+      const result = saleMachine.sellItem({
+        item: "b1",
+        coins: {
+          quarters: 4
+        }
+      });
+      expect(result).toEqual("not enough moneys");
+    });
+    test("Not in stock", () => {
+      const result = saleMachine.sellItem({
+        item: "b2",
+        coins: {
+          loonies: 2,
+          quarters: 4
+        }
+      });
+      expect(result).toEqual("not enough stock");
     });
     test("purchase item", () => {
       const result = saleMachine.sellItem({

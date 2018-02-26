@@ -1,3 +1,5 @@
+![Test Suit Passing](./tests-screenshot.png)
+
 # Vending Machine
 
 #### Goal
